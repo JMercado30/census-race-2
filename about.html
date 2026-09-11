@@ -114,8 +114,16 @@ ul.task-list li input[type="checkbox"] {
 <div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article page-navbar">
 <!-- sidebar -->
 <!-- margin-sidebar -->
-    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar zindex-bottom">
-        
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+        <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">On this page</h2>
+   
+  <ul>
+  <li><a href="#about-this-project" id="toc-about-this-project" class="nav-link active" data-scroll-target="#about-this-project">About This Project</a></li>
+  <li><a href="#data-source" id="toc-data-source" class="nav-link" data-scroll-target="#data-source">Data Source</a></li>
+  <li><a href="#tools-packages" id="toc-tools-packages" class="nav-link" data-scroll-target="#tools-packages">Tools &amp; Packages</a></li>
+  </ul>
+</nav>
     </div>
 <!-- main -->
 <main class="content" id="quarto-document-content">
@@ -139,9 +147,30 @@ ul.task-list li input[type="checkbox"] {
 </header>
 
 
-<p>About this site</p>
+<section id="about-this-project" class="level2">
+<h2 class="anchored" data-anchor-id="about-this-project">About This Project</h2>
+<p>This project explores county-level demographic shifts across Florida between the 2000 and 2020 Decennial Censuses, focusing on changes in Hispanic, non-Hispanic White, Black, and Asian population shares.</p>
+</section>
+<section id="data-source" class="level2">
+<h2 class="anchored" data-anchor-id="data-source">Data Source</h2>
+<p>Data is sourced from the <strong>U.S. Census Bureau</strong> decennial censuses (2000, 2010, and 2020) retrieved using the <a href="https://walker-data.com/tidycensus/"><code>tidycensus</code></a> package in R:</p>
+<ul>
+<li><strong>2000 &amp; 2010:</strong> Summary File 1 (SF1)</li>
+<li><strong>2020:</strong> Public Law 94-171 Redistricting Data Summary File</li>
+</ul>
+</section>
+<section id="tools-packages" class="level2">
+<h2 class="anchored" data-anchor-id="tools-packages">Tools &amp; Packages</h2>
+<ul>
+<li><strong>R &amp; RStudio</strong></li>
+<li><strong>Quarto</strong> for reproducible web publishing</li>
+<li><strong>Leaflet &amp; sf</strong> for spatial data manipulation and interactive mapping</li>
+<li><strong>Tidyverse</strong> for data reshaping and analysis</li>
+</ul>
+<p>This project was created by <a href="https://github.com/JMercado30">JMercado30</a> as part of data science coursework.</p>
 
 
+</section>
 
 </main> <!-- /main -->
 <script id="quarto-html-after-body" type="application/javascript">
@@ -217,7 +246,7 @@ ul.task-list li input[type="checkbox"] {
     }
       var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
       var mailtoRegex = new RegExp(/^mailto:/);
-        var filterRegex = new RegExp('/' + window.location.host + '/');
+        var filterRegex = new RegExp("https:\/\/JMercado30\.github\.io\/census-race-2\/");
       var isInternal = (href) => {
           return filterRegex.test(href) || localhostRegex.test(href) || mailtoRegex.test(href);
       }

@@ -4,20 +4,48 @@
     "href": "about.html",
     "title": "About",
     "section": "",
-    "text": "About this site"
+    "text": "This project explores county-level demographic shifts across Florida between the 2000 and 2020 Decennial Censuses, focusing on changes in Hispanic, non-Hispanic White, Black, and Asian population shares."
+  },
+  {
+    "objectID": "about.html#about-this-project",
+    "href": "about.html#about-this-project",
+    "title": "About",
+    "section": "",
+    "text": "This project explores county-level demographic shifts across Florida between the 2000 and 2020 Decennial Censuses, focusing on changes in Hispanic, non-Hispanic White, Black, and Asian population shares."
+  },
+  {
+    "objectID": "about.html#data-source",
+    "href": "about.html#data-source",
+    "title": "About",
+    "section": "Data Source",
+    "text": "Data Source\nData is sourced from the U.S. Census Bureau decennial censuses (2000, 2010, and 2020) retrieved using the tidycensus package in R:\n\n2000 & 2010: Summary File 1 (SF1)\n2020: Public Law 94-171 Redistricting Data Summary File"
+  },
+  {
+    "objectID": "about.html#tools-packages",
+    "href": "about.html#tools-packages",
+    "title": "About",
+    "section": "Tools & Packages",
+    "text": "Tools & Packages\n\nR & RStudio\nQuarto for reproducible web publishing\nLeaflet & sf for spatial data manipulation and interactive mapping\nTidyverse for data reshaping and analysis\n\nThis project was created by JMercado30 as part of data science coursework."
   },
   {
     "objectID": "index.html",
     "href": "index.html",
     "title": "Florida Census Demographics (2000–2020)",
     "section": "",
-    "text": "Between 2000 and 2020, Florida saw significant demographic shifts across all major racial and ethnic groups:\n\nHispanic: Substantial increases statewide, especially in central and southwest Florida.\nWhite (non-Hispanic): Decreased as a overall percentage of population in almost all 67 counties.\nBlack: Steady population shares in northern counties, with growth in select central and southern metros.\nAsian: Steady percentage growth across major suburban and university counties.\n\nUse the radio buttons in the upper right to toggle which demographic shift colors the map. Hover over any county to view the full 20-year shift for all four groups."
+    "text": "Between 2000 and 2020, Florida saw significant demographic shifts across all major racial and ethnic groups:\n\nHispanic: Substantial increases statewide, especially in central and southwest Florida.\nWhite (non-Hispanic): Decreased as a overall percentage of population in almost all 67 counties.\nBlack: Steady population shares in northern counties, with growth in select central and southern metros.\nAsian: Steady percentage growth across major suburban and university counties.\n\nUse the radio buttons in the upper right to toggle which demographic shift colors the map. Hover over any county to view the 20-year shift for the selected group."
   },
   {
     "objectID": "index.html#two-decades-of-demographic-change-across-florida",
     "href": "index.html#two-decades-of-demographic-change-across-florida",
     "title": "Florida Census Demographics (2000–2020)",
     "section": "",
-    "text": "Between 2000 and 2020, Florida saw significant demographic shifts across all major racial and ethnic groups:\n\nHispanic: Substantial increases statewide, especially in central and southwest Florida.\nWhite (non-Hispanic): Decreased as a overall percentage of population in almost all 67 counties.\nBlack: Steady population shares in northern counties, with growth in select central and southern metros.\nAsian: Steady percentage growth across major suburban and university counties.\n\nUse the radio buttons in the upper right to toggle which demographic shift colors the map. Hover over any county to view the full 20-year shift for all four groups."
+    "text": "Between 2000 and 2020, Florida saw significant demographic shifts across all major racial and ethnic groups:\n\nHispanic: Substantial increases statewide, especially in central and southwest Florida.\nWhite (non-Hispanic): Decreased as a overall percentage of population in almost all 67 counties.\nBlack: Steady population shares in northern counties, with growth in select central and southern metros.\nAsian: Steady percentage growth across major suburban and university counties.\n\nUse the radio buttons in the upper right to toggle which demographic shift colors the map. Hover over any county to view the 20-year shift for the selected group."
+  },
+  {
+    "objectID": "index.html#top-counties-by-demographic-shift",
+    "href": "index.html#top-counties-by-demographic-shift",
+    "title": "Florida Census Demographics (2000–2020)",
+    "section": "Top Counties by Demographic Shift",
+    "text": "Top Counties by Demographic Shift\nSelect a demographic group in the map above to view the top 10 counties with the largest shift below."
   }
 ]
