@@ -2,4 +2,23 @@
 title: "About"
 ---
 
-About this site
+## About This Project
+
+This project explores county-level demographic shifts across Florida between the 2000 and 2020 Decennial Censuses, focusing on changes in Hispanic, non-Hispanic White, Black, and Asian population shares.
+
+## Data Source
+
+Data is sourced from the **U.S. Census Bureau** decennial censuses (2000, 2010, and 2020) retrieved using the [`tidycensus`](https://walker-data.com/tidycensus/) package in R:
+
+- **2000 & 2010:** Summary File 1 (SF1)
+- **2020:** Public Law 94-171 Redistricting Data Summary File
+
+## Tools & Packages
+
+- **R & RStudio**
+- **Quarto** for reproducible web publishing
+- **Leaflet & sf** for spatial data manipulation and interactive mapping
+- **Tidyverse** for data reshaping and analysis
+
+This project was created by [JMercado30](https://github.com/JMercado30) as part of data science coursework.
+

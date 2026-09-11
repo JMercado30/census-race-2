@@ -11,6 +11,7 @@ library(tidyverse)
 library(sf)
 library(leaflet)
 library(htmltools)
+library(htmlwidgets)
 
 # Load county boundaries and decennial census data
 fl_geo  <- read_rds("data/fl_geo.rds")
@@ -32,18 +33,25 @@ race_wide <- fl_race |>
 fl_map <- left_join(fl_geo, race_wide, by = "GEOID") |>
   st_transform(4326)
 
-# Create hover labels summarizing all four groups for each county
-labels <- sprintf(
-  "<strong>%s</strong><br/>
-   Hispanic: %s%% &rarr; %s%% (%+0.1f pts)<br/>
-   White: %s%% &rarr; %s%% (%+0.1f pts)<br/>
-   Black: %s%% &rarr; %s%% (%+0.1f pts)<br/>
-   Asian: %s%% &rarr; %s%% (%+0.1f pts)",
-  fl_map$NAME,
-  fl_map$hispanic_2000, fl_map$hispanic_2020, fl_map$diff_hisp,
-  fl_map$white_2000, fl_map$white_2020, fl_map$diff_white,
-  fl_map$black_2000, fl_map$black_2020, fl_map$diff_black,
-  fl_map$asian_2000, fl_map$asian_2020, fl_map$diff_asian
+# Create race-specific hover labels for each county
+labels_hisp <- sprintf(
+  "<strong>%s</strong><br/>Hispanic: %s%% &rarr; %s%% (%+0.1f pts)",
+  fl_map$NAME, fl_map$hispanic_2000, fl_map$hispanic_2020, fl_map$diff_hisp
+) |> lapply(HTML)
+
+labels_white <- sprintf(
+  "<strong>%s</strong><br/>White: %s%% &rarr; %s%% (%+0.1f pts)",
+  fl_map$NAME, fl_map$white_2000, fl_map$white_2020, fl_map$diff_white
+) |> lapply(HTML)
+
+labels_black <- sprintf(
+  "<strong>%s</strong><br/>Black: %s%% &rarr; %s%% (%+0.1f pts)",
+  fl_map$NAME, fl_map$black_2000, fl_map$black_2020, fl_map$diff_black
+) |> lapply(HTML)
+
+labels_asian <- sprintf(
+  "<strong>%s</strong><br/>Asian: %s%% &rarr; %s%% (%+0.1f pts)",
+  fl_map$NAME, fl_map$asian_2000, fl_map$asian_2020, fl_map$diff_asian
 ) |> lapply(HTML)
 
 # Define color scales for each demographic group
@@ -62,7 +70,7 @@ Between 2000 and 2020, Florida saw significant demographic shifts across all maj
 - **Black**: Steady population shares in northern counties, with growth in select central and southern metros.
 - **Asian**: Steady percentage growth across major suburban and university counties.
 
-Use the radio buttons in the upper right to toggle which demographic shift colors the map. Hover over any county to view the full 20-year shift for all four groups.
+Use the radio buttons in the upper right to toggle which demographic shift colors the map. Hover over any county to view the 20-year shift for the selected group.
 
 ```{r}
 #| label: interactive-map
@@ -75,28 +83,190 @@ leaflet(fl_map, width = "100%", height = "540px") |>
     group = "Hispanic Change",
     fillColor = ~pal_hisp(diff_hisp),
     fillOpacity = 0.7, weight = 1, color = "white",
-    label = labels
+    label = labels_hisp
   ) |>
   addPolygons(
     group = "White Change",
     fillColor = ~pal_white(diff_white),
     fillOpacity = 0.7, weight = 1, color = "white",
-    label = labels
+    label = labels_white
   ) |>
   addPolygons(
     group = "Black Change",
     fillColor = ~pal_black(diff_black),
     fillOpacity = 0.7, weight = 1, color = "white",
-    label = labels
+    label = labels_black
   ) |>
   addPolygons(
     group = "Asian Change",
     fillColor = ~pal_asian(diff_asian),
     fillOpacity = 0.7, weight = 1, color = "white",
-    label = labels
+    label = labels_asian
   ) |>
   addLayersControl(
     baseGroups = c("Hispanic Change", "White Change", "Black Change", "Asian Change"),
     options = layersControlOptions(collapsed = FALSE)
-  )
+  ) |>
+  addLegend(
+    pal = pal_hisp, values = ~diff_hisp,
+    title = "Hispanic (% pts)",
+    className = "info legend legend-hisp",
+    position = "bottomright"
+  ) |>
+  addLegend(
+    pal = pal_white, values = ~diff_white,
+    title = "White (% pts)",
+    className = "info legend legend-white",
+    position = "bottomright"
+  ) |>
+  addLegend(
+    pal = pal_black, values = ~diff_black,
+    title = "Black (% pts)",
+    className = "info legend legend-black",
+    position = "bottomright"
+  ) |>
+  addLegend(
+    pal = pal_asian, values = ~diff_asian,
+    title = "Asian (% pts)",
+    className = "info legend legend-asian",
+    position = "bottomright"
+  ) |>
+  onRender("
+    function(el, x) {
+      var map = this;
+      function updateSelection(activeLayer) {
+        // Hide all legends and plots
+        document.querySelectorAll('.legend-hisp, .legend-white, .legend-black, .legend-asian').forEach(function(l) {
+          l.style.display = 'none';
+        });
+        document.querySelectorAll('.race-plot').forEach(function(p) {
+          p.style.display = 'none';
+        });
+
+        // Show matching legend and plot
+        if (activeLayer === 'Hispanic Change') {
+          document.querySelectorAll('.legend-hisp').forEach(function(l) { l.style.display = 'block'; });
+          var p = document.getElementById('plot-hisp');
+          if (p) p.style.display = 'block';
+        } else if (activeLayer === 'White Change') {
+          document.querySelectorAll('.legend-white').forEach(function(l) { l.style.display = 'block'; });
+          var p = document.getElementById('plot-white');
+          if (p) p.style.display = 'block';
+        } else if (activeLayer === 'Black Change') {
+          document.querySelectorAll('.legend-black').forEach(function(l) { l.style.display = 'block'; });
+          var p = document.getElementById('plot-black');
+          if (p) p.style.display = 'block';
+        } else if (activeLayer === 'Asian Change') {
+          document.querySelectorAll('.legend-asian').forEach(function(l) { l.style.display = 'block'; });
+          var p = document.getElementById('plot-asian');
+          if (p) p.style.display = 'block';
+        }
+      }
+      updateSelection('Hispanic Change');
+      map.on('baselayerchange', function(e) {
+        updateSelection(e.name);
+      });
+    }
+  ")
 ```
+
+## Top Counties by Demographic Shift
+
+Select a demographic group in the map above to view the top 10 counties with the largest shift below.
+
+::: {#plot-hisp .race-plot}
+```{r}
+#| label: plot-hisp
+#| echo: false
+#| message: false
+
+fl_map |>
+  st_drop_geometry() |>
+  slice_max(diff_hisp, n = 10) |>
+  mutate(county = fct_reorder(str_remove(NAME, " County, Florida"), diff_hisp)) |>
+  ggplot(aes(x = diff_hisp, y = county)) +
+  geom_col(fill = "#e6550d") +
+  geom_text(aes(label = paste0("+", diff_hisp, " pts")), hjust = -0.15, size = 3.5) +
+  scale_x_continuous(expand = expansion(mult = c(0, 0.18))) +
+  labs(
+    title = "Top 10 Florida Counties by Hispanic Share Growth (2000–2020)",
+    x = "Percentage Point Increase",
+    y = NULL,
+    caption = "Source: U.S. Census Bureau (SF1 & PL 94-171)"
+  ) +
+  theme_minimal()
+```
+:::
+
+::: {#plot-white .race-plot style="display: none;"}
+```{r}
+#| label: plot-white
+#| echo: false
+#| message: false
+
+fl_map |>
+  st_drop_geometry() |>
+  slice_min(diff_white, n = 10) |>
+  mutate(county = fct_reorder(str_remove(NAME, " County, Florida"), desc(diff_white))) |>
+  ggplot(aes(x = diff_white, y = county)) +
+  geom_col(fill = "#3182bd") +
+  geom_text(aes(label = paste0(diff_white, " pts")), hjust = 1.15, size = 3.5) +
+  scale_x_continuous(expand = expansion(mult = c(0.18, 0))) +
+  labs(
+    title = "Top 10 Florida Counties by White Share Decline (2000–2020)",
+    x = "Percentage Point Change",
+    y = NULL,
+    caption = "Source: U.S. Census Bureau (SF1 & PL 94-171)"
+  ) +
+  theme_minimal()
+```
+:::
+
+::: {#plot-black .race-plot style="display: none;"}
+```{r}
+#| label: plot-black
+#| echo: false
+#| message: false
+
+fl_map |>
+  st_drop_geometry() |>
+  slice_max(diff_black, n = 10) |>
+  mutate(county = fct_reorder(str_remove(NAME, " County, Florida"), diff_black)) |>
+  ggplot(aes(x = diff_black, y = county)) +
+  geom_col(fill = "#756bb1") +
+  geom_text(aes(label = paste0("+", diff_black, " pts")), hjust = -0.15, size = 3.5) +
+  scale_x_continuous(expand = expansion(mult = c(0, 0.18))) +
+  labs(
+    title = "Top 10 Florida Counties by Black Share Growth (2000–2020)",
+    x = "Percentage Point Increase",
+    y = NULL,
+    caption = "Source: U.S. Census Bureau (SF1 & PL 94-171)"
+  ) +
+  theme_minimal()
+```
+:::
+
+::: {#plot-asian .race-plot style="display: none;"}
+```{r}
+#| label: plot-asian
+#| echo: false
+#| message: false
+
+fl_map |>
+  st_drop_geometry() |>
+  slice_max(diff_asian, n = 10) |>
+  mutate(county = fct_reorder(str_remove(NAME, " County, Florida"), diff_asian)) |>
+  ggplot(aes(x = diff_asian, y = county)) +
+  geom_col(fill = "#31a354") +
+  geom_text(aes(label = paste0("+", diff_asian, " pts")), hjust = -0.15, size = 3.5) +
+  scale_x_continuous(expand = expansion(mult = c(0, 0.18))) +
+  labs(
+    title = "Top 10 Florida Counties by Asian Share Growth (2000–2020)",
+    x = "Percentage Point Increase",
+    y = NULL,
+    caption = "Source: U.S. Census Bureau (SF1 & PL 94-171)"
+  ) +
+  theme_minimal()
+```
+:::
+
